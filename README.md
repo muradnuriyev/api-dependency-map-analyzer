@@ -1,0 +1,55 @@
+# API Dependency Map Analyzer
+
+Parse OpenAPI/Swagger specs and visualize how endpoints, schemas, and tags depend on each other. The MVP ships with upload/paste, schema parsing, dependency graph, and API metrics.
+
+## Features
+- Upload/paste OpenAPI v3 JSON or YAML (validated with zod + YAML parser). Select the bundled `public/samples/petstore.json` to try it quickly.
+- Endpoint list with search and tag filter, plus an endpoint details panel (request/response schemas, status codes).
+- Dependency graph (endpoints ↔ schemas ↔ tags) rendered with ReactFlow, highlighting shared schemas.
+- Metrics dashboard (counts, schema usage, tag distribution) and a short analysis summary.
+- API routes: `POST /api/specs` to store specs, `GET /api/specs/:id` to fetch + analyze on demand.
+
+## Stack
+- Next.js (App Router) + TypeScript, Tailwind CSS v4
+- ReactFlow for dependency graph visuals
+- Prisma + SQLite for persistence
+- YAML + @apidevtools/swagger-parser (optional validation surface) + custom parsing/analysis in `lib/openapi/*`
+- zod for input validation
+
+## Getting started
+1. Install dependencies
+   ```bash
+   npm install
+   ```
+2. Ensure `.env` has `DATABASE_URL="file:./dev.db"` (already scaffolded).
+3. Generate Prisma Client
+   ```bash
+   npx prisma generate
+   ```
+4. Create the SQLite schema. Prefer `npx prisma migrate dev --name init` (if the migration engine works in your environment). If it fails, run the SQL directly:
+   ```bash
+   echo 'CREATE TABLE IF NOT EXISTS "ApiSpec" ("id" TEXT NOT NULL PRIMARY KEY, "name" TEXT NOT NULL, "raw" TEXT NOT NULL, "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);' | npx prisma db execute --stdin --url "file:./dev.db"
+   ```
+5. Start the dev server
+   ```bash
+   npm run dev
+   ```
+6. Visit `http://localhost:3000`, click “Use sample”, or paste/upload your own spec.
+
+## Architecture
+- `lib/openapi/types.ts` — domain types for endpoints, schemas, dependencies, metrics.
+- `lib/openapi/parseSpec.ts` — parse JSON/YAML to the domain model (paths, tags, refs).
+- `lib/openapi/analyzeDependencies.ts` — build schema ↔ endpoint ↔ tag graph.
+- `lib/openapi/buildGraph.ts` — map the dependency graph into ReactFlow nodes/edges.
+- `lib/openapi/calculateMetrics.ts` — counts, schema usage, tag distribution.
+- `app/api/specs/*` — POST to save specs, GET to fetch + analyze a stored spec.
+- `app/specs/[id]/page.tsx` — main analysis view: graph, metrics, endpoint details.
+- `components/*` — UI widgets (UploadSpecForm, EndpointList, DependencyGraph, MetricsPanel, etc.).
+- `prisma/schema.prisma` — Prisma model for stored specs (SQLite).
+
+## Roadmap (next steps)
+- URL import (raw GitHub/Swagger URL).
+- Health score: redundant endpoints, oversized schemas, tight coupling flags.
+- Primitive call-flow hints (e.g., `/login -> /users/me -> /orders`).
+- AuthN: GitHub OAuth + user-owned specs.
+- Export reports (Markdown/PDF). 

@@ -1,0 +1,70 @@
+import MainLayout from "@/components/Layout/MainLayout";
+import PageHeader from "@/components/Layout/PageHeader";
+import SpecAnalysisView from "@/components/SpecAnalysisView";
+import { prisma } from "@/lib/db";
+import { calculateApiMetrics } from "@/lib/openapi/calculateMetrics";
+import { buildDependencyGraph } from "@/lib/openapi/analyzeDependencies";
+import { parseOpenApiSpec } from "@/lib/openapi/parseSpec";
+import { InvalidSpecError } from "@/lib/errors";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+interface SpecPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function SpecPage({ params }: SpecPageProps) {
+  const { id } = await params;
+  const spec = await prisma.apiSpec.findUnique({ where: { id } });
+
+  if (!spec) {
+    notFound();
+  }
+
+  let errorMessage: string | null = null;
+  let parsedModel: ReturnType<typeof parseOpenApiSpec> | null = null;
+  let graph: ReturnType<typeof buildDependencyGraph> | null = null;
+  let metrics: ReturnType<typeof calculateApiMetrics> | null = null;
+
+  try {
+    parsedModel = parseOpenApiSpec(spec.raw);
+    graph = buildDependencyGraph(parsedModel);
+    metrics = calculateApiMetrics(parsedModel);
+  } catch (error) {
+    errorMessage =
+      error instanceof InvalidSpecError
+        ? error.message
+        : "Failed to parse or analyze this specification.";
+  }
+
+  return (
+    <MainLayout>
+      <PageHeader
+        title={spec.name}
+        description={`Uploaded ${new Intl.DateTimeFormat("en", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }).format(spec.createdAt)}`}
+        actions={
+          <Link
+            href="/"
+            className="rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+          >
+            Upload another
+          </Link>
+        }
+      />
+
+      <div className="mt-6 space-y-4">
+        {errorMessage ? (
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800">
+            <p className="font-semibold">Unable to analyze this spec</p>
+            <p className="text-sm">{errorMessage}</p>
+          </div>
+        ) : parsedModel && graph && metrics ? (
+          <SpecAnalysisView model={parsedModel} graph={graph} metrics={metrics} />
+        ) : null}
+      </div>
+    </MainLayout>
+  );
+}
