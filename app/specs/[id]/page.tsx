@@ -14,6 +14,7 @@ interface SpecPageProps {
 }
 
 export default async function SpecPage({ params }: SpecPageProps) {
+  // Dynamic params are a Promise in RSC; unwrap before use.
   const { id } = await params;
   const spec = await prisma.apiSpec.findUnique({ where: { id } });
 
@@ -21,6 +22,7 @@ export default async function SpecPage({ params }: SpecPageProps) {
     notFound();
   }
 
+  // Prepare analysis outputs or a friendly error message.
   let errorMessage: string | null = null;
   let parsedModel: ReturnType<typeof parseOpenApiSpec> | null = null;
   let graph: ReturnType<typeof buildDependencyGraph> | null = null;

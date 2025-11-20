@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
+/**
+ * Prisma client singleton to avoid exhausting connection pools in dev/hot-reload.
+ */
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
 };

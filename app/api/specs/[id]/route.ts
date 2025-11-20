@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { InvalidSpecError } from "@/lib/errors";
 import { calculateApiMetrics } from "@/lib/openapi/calculateMetrics";
@@ -6,12 +6,17 @@ import { buildDependencyGraph } from "@/lib/openapi/analyzeDependencies";
 import { parseOpenApiSpec } from "@/lib/openapi/parseSpec";
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function GET(_request: Request, { params }: Params) {
+/**
+ * GET /api/specs/:id
+ * Fetches stored spec, parses+analyzes on the fly, returns raw model/graph/metrics.
+ */
+export async function GET(_request: NextRequest, { params }: Params) {
   try {
-    const spec = await prisma.apiSpec.findUnique({ where: { id: params.id } });
+    const { id } = await params;
+    const spec = await prisma.apiSpec.findUnique({ where: { id } });
     if (!spec) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }

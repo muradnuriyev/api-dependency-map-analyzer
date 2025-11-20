@@ -8,12 +8,14 @@ interface UploadSpecFormProps {
 }
 
 export default function UploadSpecForm({ defaultContent = "" }: UploadSpecFormProps) {
+  // Local state for form controls and error feedback.
   const router = useRouter();
   const [name, setName] = useState("");
   const [content, setContent] = useState(defaultContent);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Reads the uploaded JSON/YAML file into the textarea and sets default name.
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -25,6 +27,7 @@ export default function UploadSpecForm({ defaultContent = "" }: UploadSpecFormPr
     }
   };
 
+  // Submit handler: validate locally, POST to API, then redirect to spec page.
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
@@ -57,6 +60,7 @@ export default function UploadSpecForm({ defaultContent = "" }: UploadSpecFormPr
     }
   };
 
+  // Fetch bundled sample spec from /public and prefill fields.
   const handleLoadSample = async () => {
     setError(null);
     try {

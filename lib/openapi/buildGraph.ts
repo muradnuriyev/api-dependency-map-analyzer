@@ -6,6 +6,9 @@ export interface ReactFlowGraphData {
   edges: Edge[];
 }
 
+/**
+  * Palette for edge styles based on relationship kind.
+  */
 const edgeColor: Record<DependencyGraph["edges"][number]["kind"], string> = {
   "schema-usage": "#2563eb",
   "shared-schema": "#0ea5e9",
@@ -13,6 +16,10 @@ const edgeColor: Record<DependencyGraph["edges"][number]["kind"], string> = {
   "status-code-chain": "#f97316",
 };
 
+/**
+ * Transform our domain graph into ReactFlow nodes/edges, including a simple
+ * grid-ish layout and per-kind styling.
+ */
 export function buildReactFlowGraph(graph: DependencyGraph): ReactFlowGraphData {
   const positions = layoutGraph(graph);
 
@@ -36,6 +43,9 @@ export function buildReactFlowGraph(graph: DependencyGraph): ReactFlowGraphData 
   return { nodes, edges };
 }
 
+/**
+ * Very light-weight layout: place schemas, endpoints, tags in rows.
+ */
 function layoutGraph(graph: DependencyGraph): Map<string, { x: number; y: number }> {
   const order: Array<DependencyGraph["nodes"][number]["kind"]> = [
     "schema",
@@ -60,6 +70,9 @@ function layoutGraph(graph: DependencyGraph): Map<string, { x: number; y: number
   return map;
 }
 
+/**
+ * Base style per node kind.
+ */
 function nodeStyle(kind: DependencyGraph["nodes"][number]["kind"]) {
   const palette: Record<typeof kind, { bg: string; color: string; border: string }> = {
     endpoint: { bg: "#eef2ff", color: "#1f2937", border: "#4f46e5" },
@@ -79,6 +92,9 @@ function nodeStyle(kind: DependencyGraph["nodes"][number]["kind"]) {
   };
 }
 
+/**
+ * Human-friendly edge labels for the graph legend.
+ */
 function labelForEdge(kind: DependencyGraph["edges"][number]["kind"]): string {
   switch (kind) {
     case "schema-usage":

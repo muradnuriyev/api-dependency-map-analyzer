@@ -5,6 +5,7 @@ interface SpecListProps {
 }
 
 export default function SpecList({ specs }: SpecListProps) {
+  // Lists a handful of recently saved specs with links.
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between gap-2">

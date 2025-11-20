@@ -5,7 +5,7 @@ import ReactFlow, { Background, Controls, MiniMap, Node } from "reactflow";
 import "reactflow/dist/style.css";
 
 import { buildReactFlowGraph } from "@/lib/openapi/buildGraph";
-import { DependencyGraph } from "@/lib/openapi/types";
+import type { DependencyGraph } from "@/lib/openapi/types";
 
 interface DependencyGraphProps {
   graph: DependencyGraph;
@@ -18,10 +18,12 @@ export default function DependencyGraph({
   selectedEndpointId,
   onSelectEndpoint,
 }: DependencyGraphProps) {
+  // Memoize transformation to ReactFlow nodes/edges.
   const { nodes, edges } = useMemo(() => buildReactFlowGraph(graph), [graph]);
 
   const highlightedNodeId = selectedEndpointId ? `endpoint:${selectedEndpointId}` : undefined;
 
+  // Apply highlight styling to the currently selected endpoint node.
   const decoratedNodes: Node[] = useMemo(
     () =>
       nodes.map((node) => ({

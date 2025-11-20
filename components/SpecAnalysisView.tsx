@@ -15,10 +15,12 @@ interface SpecAnalysisViewProps {
 }
 
 export default function SpecAnalysisView({ model, graph, metrics }: SpecAnalysisViewProps) {
+  // Track which endpoint is selected to drive details/highlighting.
   const [selectedEndpointId, setSelectedEndpointId] = useState<string | null>(
     model.endpoints[0]?.id ?? null,
   );
 
+  // Resolve full endpoint data for the selected id.
   const selectedEndpoint = useMemo(
     () => model.endpoints.find((endpoint) => endpoint.id === selectedEndpointId) ?? null,
     [model.endpoints, selectedEndpointId],

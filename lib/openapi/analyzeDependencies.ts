@@ -1,5 +1,9 @@
 import { ApiSpecDomainModel, DependencyGraph } from "./types";
 
+/**
+ * Build a logical dependency graph linking schemas, endpoints, and tags.
+ * The result is used to construct ReactFlow nodes/edges later.
+ */
 export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph {
   const nodes: DependencyGraph["nodes"] = [];
   const edges: DependencyGraph["edges"] = [];
@@ -8,6 +12,7 @@ export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph
   const endpointIds = new Set<string>();
   const schemaUsage = new Map<string, Set<string>>();
 
+  // Add schema nodes up front.
   model.schemas.forEach((schema) => {
     nodes.push({
       id: `schema:${schema.name}`,
@@ -16,6 +21,7 @@ export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph
     });
   });
 
+  // Add endpoint nodes and connect schema/tag edges.
   model.endpoints.forEach((endpoint) => {
     endpointIds.add(endpoint.id);
     nodes.push({
@@ -48,6 +54,7 @@ export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph
     });
   });
 
+  // Add tag nodes (deduped later).
   model.endpoints
     .flatMap((endpoint) => endpoint.tags)
     .forEach((tag) => {
@@ -58,7 +65,7 @@ export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph
       });
     });
 
-  // shared-schema edges between endpoints using the same schema
+  // Create shared-schema links between endpoints using the same schema.
   schemaUsage.forEach((endpointSet, schemaName) => {
     if (endpointSet.size < 2) return;
     const endpoints = Array.from(endpointSet);
@@ -76,12 +83,15 @@ export function buildDependencyGraph(model: ApiSpecDomainModel): DependencyGraph
     }
   });
 
-  // remove duplicate nodes (possible from tag flatten)
+  // Remove duplicate nodes produced by tag flattening.
   const uniqueNodes = dedupeNodes(nodes);
 
   return { nodes: uniqueNodes, edges };
 }
 
+/**
+ * Insert an edge if it hasn't been added yet.
+ */
 function addEdge(
   edges: DependencyGraph["edges"],
   edgeKeys: Set<string>,
@@ -101,6 +111,9 @@ function addEdge(
   });
 }
 
+/**
+ * Remove duplicate nodes while preserving order.
+ */
 function dedupeNodes(nodes: DependencyGraph["nodes"]): DependencyGraph["nodes"] {
   const seen = new Set<string>();
   const result: DependencyGraph["nodes"] = [];

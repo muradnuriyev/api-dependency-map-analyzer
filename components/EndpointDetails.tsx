@@ -8,6 +8,7 @@ interface EndpointDetailsProps {
 }
 
 export default function EndpointDetails({ endpoint, schemas }: EndpointDetailsProps) {
+  // Empty state when no endpoint is selected.
   if (!endpoint) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -18,6 +19,7 @@ export default function EndpointDetails({ endpoint, schemas }: EndpointDetailsPr
 
   const schemaLookup = new Map(schemas.map((schema) => [schema.name, schema]));
 
+  // Helper to render request/response schema lists with complexity badge.
   const renderSchemas = (items: { name: string }[], label: string) => (
     <div>
       <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</h4>

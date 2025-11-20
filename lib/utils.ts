@@ -1,6 +1,10 @@
 import YAML from "yaml";
 import { InvalidSpecError } from "./errors";
 
+/**
+ * Parse incoming raw content (string or object) into a plain object.
+ * Attempts JSON first, then YAML. Throws InvalidSpecError on invalid input.
+ */
 export function parseRawToObject(raw: string | object): Record<string, unknown> {
   if (typeof raw === "object" && raw !== null) {
     return raw as Record<string, unknown>;
@@ -28,6 +32,9 @@ export function parseRawToObject(raw: string | object): Record<string, unknown> 
   }
 }
 
+/**
+ * Extract schema name from a $ref string like "#/components/schemas/User".
+ */
 export function extractRefName(ref?: string | null): string | null {
   if (!ref || typeof ref !== "string") return null;
   const match = ref.match(/#\/components\/schemas\/([^\/\s]+)/);
@@ -37,6 +44,9 @@ export function extractRefName(ref?: string | null): string | null {
   return fallback ?? null;
 }
 
+/**
+ * Deduplicate an array by computed key while preserving order.
+ */
 export function uniqueBy<T>(items: T[], keyFn: (item: T) => string): T[] {
   const seen = new Set<string>();
   const result: T[] = [];
@@ -49,6 +59,9 @@ export function uniqueBy<T>(items: T[], keyFn: (item: T) => string): T[] {
   return result;
 }
 
+/**
+ * Normalize unknown value to an array. Undefined/null become [].
+ */
 export function ensureArray<T>(value: T | T[] | undefined | null): T[] {
   if (value === undefined || value === null) return [];
   return Array.isArray(value) ? value : [value];

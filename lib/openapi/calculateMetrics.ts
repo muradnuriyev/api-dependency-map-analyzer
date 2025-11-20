@@ -1,5 +1,8 @@
 import { ApiMetrics, ApiSpecDomainModel } from "./types";
 
+/**
+ * Compute basic API metrics: counts, schema usage, and tag distribution.
+ */
 export function calculateApiMetrics(model: ApiSpecDomainModel): ApiMetrics {
   const endpointCount = model.endpoints.length;
   const schemaCount = model.schemas.length;

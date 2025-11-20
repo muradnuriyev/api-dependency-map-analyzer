@@ -10,15 +10,18 @@ interface EndpointListProps {
 }
 
 export default function EndpointList({ endpoints, selectedId, onSelect }: EndpointListProps) {
+  // Local UI state for search and tag filters.
   const [search, setSearch] = useState("");
   const [tagFilter, setTagFilter] = useState<string | null>(null);
 
+  // Gather distinct tags to render chips.
   const tags = useMemo(() => {
     const all = new Set<string>();
     endpoints.forEach((ep) => ep.tags.forEach((tag) => all.add(tag)));
     return Array.from(all).sort();
   }, [endpoints]);
 
+  // Filter endpoints based on search text and tag selection.
   const filtered = useMemo(() => {
     return endpoints.filter((endpoint) => {
       const matchesSearch =

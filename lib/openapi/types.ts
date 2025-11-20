@@ -1,3 +1,6 @@
+/**
+ * Canonical HTTP methods supported by OpenAPI operations.
+ */
 export type HttpMethod =
   | "get"
   | "post"
@@ -7,16 +10,25 @@ export type HttpMethod =
   | "options"
   | "head";
 
+/**
+ * Reference to a schema name (components.schemas key).
+ */
 export interface ApiSchemaRef {
   name: string;
 }
 
+/**
+ * Schema metadata held in the domain model.
+ */
 export interface ApiSchema {
   name: string;
   raw: unknown;
   complexityScore: number;
 }
 
+/**
+ * Simplified endpoint representation extracted from OpenAPI paths.
+ */
 export interface ApiEndpoint {
   id: string;
   method: HttpMethod;
@@ -29,6 +41,9 @@ export interface ApiEndpoint {
   statusCodes: string[];
 }
 
+/**
+ * Parsed OpenAPI spec mapped into a strongly typed domain structure.
+ */
 export interface ApiSpecDomainModel {
   title?: string;
   version?: string;
@@ -36,12 +51,18 @@ export interface ApiSpecDomainModel {
   schemas: ApiSchema[];
 }
 
+/**
+ * Logical dependency between nodes in the graph.
+ */
 export interface DependencyEdge {
   from: string;
   to: string;
   type: "schema-usage" | "shared-schema" | "tag-group" | "status-code-chain";
 }
 
+/**
+ * Graph structure used before mapping to ReactFlow nodes/edges.
+ */
 export interface DependencyGraph {
   nodes: {
     id: string;
@@ -56,6 +77,9 @@ export interface DependencyGraph {
   }[];
 }
 
+/**
+ * Derived metrics to summarize the API surface.
+ */
 export interface ApiMetrics {
   endpointCount: number;
   schemaCount: number;

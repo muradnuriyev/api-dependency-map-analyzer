@@ -5,6 +5,7 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ title, description, actions }: PageHeaderProps) {
+  // Header with optional description and action slot (e.g., buttons/links).
   return (
     <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 md:flex-row md:items-center md:justify-between">
       <div>

@@ -11,6 +11,7 @@ export default function AnalysisSummary({ model, metrics }: AnalysisSummaryProps
     .slice(0, 3)
     .map((item) => `${item.tag} (${item.count})`);
 
+  // Lightweight textual summary pulling insights from metrics/model.
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <h3 className="text-base font-semibold text-slate-900">Analysis summary</h3>

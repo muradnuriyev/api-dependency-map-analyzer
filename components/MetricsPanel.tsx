@@ -5,6 +5,7 @@ interface MetricsPanelProps {
 }
 
 export default function MetricsPanel({ metrics }: MetricsPanelProps) {
+  // Key figures plus two lists: most used schemas and tag distribution.
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <h3 className="text-base font-semibold text-slate-900">API metrics</h3>

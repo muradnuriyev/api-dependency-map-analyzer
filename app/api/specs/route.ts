@@ -4,6 +4,11 @@ import { InvalidSpecError } from "@/lib/errors";
 import { parseOpenApiSpec } from "@/lib/openapi/parseSpec";
 import { z } from "zod";
 
+/**
+ * POST /api/specs
+ * Validates incoming name/content, parses the OpenAPI doc to fail fast, then saves raw
+ * content in SQLite and returns the new spec id.
+ */
 const BodySchema = z.object({
   name: z.string().min(1, "Name is required"),
   content: z.string().min(1, "Specification content is required"),

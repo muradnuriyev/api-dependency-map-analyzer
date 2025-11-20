@@ -5,6 +5,7 @@ import PageHeader from "@/components/Layout/PageHeader";
 import { prisma } from "@/lib/db";
 
 export default async function Home() {
+  // Fetch a few latest specs to list under the form.
   const latestSpecs = await prisma.apiSpec.findMany({
     orderBy: { createdAt: "desc" },
     take: 6,

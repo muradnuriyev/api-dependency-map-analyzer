@@ -9,6 +9,9 @@ import {
   HttpMethod,
 } from "./types";
 
+/**
+ * Supported methods we traverse under each path item.
+ */
 const HTTP_METHODS: HttpMethod[] = [
   "get",
   "post",
@@ -19,6 +22,9 @@ const HTTP_METHODS: HttpMethod[] = [
   "head",
 ];
 
+/**
+ * Coarse shape validation to ensure we have paths/components before deeper parsing.
+ */
 const SpecShape = z.object({
   openapi: z.string().optional(),
   swagger: z.string().optional(),
@@ -36,6 +42,10 @@ const SpecShape = z.object({
     .optional(),
 });
 
+/**
+ * Parse JSON/YAML into the domain model: endpoints + schemas + metadata.
+ * Throws InvalidSpecError if no endpoints are found or structure is invalid.
+ */
 export function parseOpenApiSpec(raw: string | object): ApiSpecDomainModel {
   const parsed = parseRawToObject(raw);
   const validated = SpecShape.safeParse(parsed);
@@ -63,6 +73,9 @@ export function parseOpenApiSpec(raw: string | object): ApiSpecDomainModel {
   };
 }
 
+/**
+ * Walk all path + method combinations and collect endpoint metadata.
+ */
 function extractEndpoints(paths: Record<string, unknown>): ApiEndpoint[] {
   const endpoints: ApiEndpoint[] = [];
 
@@ -99,6 +112,9 @@ function extractEndpoints(paths: Record<string, unknown>): ApiEndpoint[] {
   return endpoints;
 }
 
+/**
+ * Collect schema refs from a requestBody.content or content map.
+ */
 function collectSchemaRefsFromContent(content: unknown): ApiSchemaRef[] {
   const refs = new Set<string>();
 
@@ -120,6 +136,9 @@ function collectSchemaRefsFromContent(content: unknown): ApiSchemaRef[] {
   return Array.from(refs).map((name) => ({ name }));
 }
 
+/**
+ * Collect schema refs from responses and track status codes encountered.
+ */
 function collectResponseSchemas(
   responses: unknown,
 ): { responseSchemas: ApiSchemaRef[]; statusCodes: string[] } {
@@ -144,6 +163,9 @@ function collectResponseSchemas(
   };
 }
 
+/**
+ * Recursively traverse a schema node to gather all referenced component names.
+ */
 function walkSchemaForRefs(schema: unknown, refs: Set<string>): void {
   if (!schema || typeof schema !== "object") return;
   const schemaObj = schema as Record<string, unknown>;
@@ -177,6 +199,9 @@ function walkSchemaForRefs(schema: unknown, refs: Set<string>): void {
   }
 }
 
+/**
+ * Convert raw components.schemas entries into ApiSchema items.
+ */
 function extractSchemas(rawSchemas: Record<string, unknown>): ApiSchema[] {
   return Object.entries(rawSchemas).map<ApiSchema>(([name, schema]) => ({
     name,
@@ -185,6 +210,9 @@ function extractSchemas(rawSchemas: Record<string, unknown>): ApiSchema[] {
   }));
 }
 
+/**
+ * Naive complexity heuristic: counts properties, nested arrays, and composition.
+ */
 function estimateSchemaComplexity(schema: unknown, depth = 1): number {
   if (!schema || typeof schema !== "object") return 1;
   const schemaObj = schema as Record<string, unknown>;
@@ -194,7 +222,10 @@ function estimateSchemaComplexity(schema: unknown, depth = 1): number {
   if (schemaObj.properties && typeof schemaObj.properties === "object") {
     const props = Object.values(schemaObj.properties as Record<string, unknown>);
     score += props.length;
-    score += props.reduce((sum, prop) => sum + estimateSchemaComplexity(prop, depth + 1), 0);
+    score += props.reduce<number>(
+      (sum, prop) => sum + estimateSchemaComplexity(prop, depth + 1),
+      0,
+    );
   }
 
   if (schemaObj.items) {
