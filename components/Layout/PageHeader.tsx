@@ -10,7 +10,7 @@ export default function PageHeader({ title, description, actions }: PageHeaderPr
     <div className="flex flex-col gap-4 border-b border-surface pb-6 md:flex-row md:items-center md:justify-between">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-          <span className="bg-gradient-to-r from-[var(--accent)] via-[color-mix(in srgb,var(--accent) 70%,var(--foreground))] to-[var(--foreground)] bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-(--accent) via-[color-mix(in srgb,var(--accent) 70%,var(--foreground))] to-(--foreground) bg-clip-text text-transparent">
             {title}
           </span>
         </h1>

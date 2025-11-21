@@ -174,7 +174,7 @@ export default function SettingsTray() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-sm font-bold text-white shadow-lg shadow-[0_15px_35px_-20px_var(--accent)] transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-sm font-bold text-white shadow-[0_15px_35px_-20px_var(--accent)] transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label="Open settings"
           aria-expanded={open}
         >
