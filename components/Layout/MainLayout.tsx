@@ -3,6 +3,8 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
+  const year = new Date().getFullYear();
+
   return (
     <div className="relative isolate overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -20,7 +22,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
         />
       </div>
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 text-foreground">{children}</div>
+        <div className="flex flex-col gap-8 text-foreground">
+          {children}
+
+          <footer className="mt-8 border-t border-surface pt-6 text-sm text-center text-foreground">
+            <span className="inline-flex items-center justify-center gap-2 rounded-full bg-surface-muted px-4 py-2 text-foreground shadow-sm">
+              <span className="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden />
+              © {year} Murad Nuriyev. All rights reserved.
+            </span>
+          </footer>
+        </div>
       </div>
     </div>
   );
