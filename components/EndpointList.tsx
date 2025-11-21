@@ -34,11 +34,11 @@ export default function EndpointList({ endpoints, selectedId, onSelect }: Endpoi
   }, [endpoints, search, tagFilter]);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="card p-4 shadow-lg">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Endpoints</h3>
-          <p className="text-xs text-slate-600">
+          <h3 className="text-base font-semibold text-foreground">Endpoints</h3>
+          <p className="text-xs muted">
             {filtered.length} / {endpoints.length} shown
           </p>
         </div>
@@ -49,7 +49,7 @@ export default function EndpointList({ endpoints, selectedId, onSelect }: Endpoi
           placeholder="Search by path, method, or summary"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+          className="w-full rounded-xl border border-surface bg-surface-muted px-3 py-2 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/60"
         />
 
         <div className="flex flex-wrap gap-2">
@@ -58,8 +58,8 @@ export default function EndpointList({ endpoints, selectedId, onSelect }: Endpoi
             onClick={() => setTagFilter(null)}
             className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
               !tagFilter
-                ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                : "border-slate-200 text-slate-700 hover:border-slate-300"
+                ? "border-accent bg-accent-soft text-foreground shadow-[0_6px_16px_-10px_var(--accent)]"
+                : "border-surface bg-surface-muted text-foreground hover-border-accent hover-text-accent"
             }`}
           >
             All tags
@@ -71,8 +71,8 @@ export default function EndpointList({ endpoints, selectedId, onSelect }: Endpoi
               onClick={() => setTagFilter(tag === tagFilter ? null : tag)}
               className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${
                 tag === tagFilter
-                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
-                  : "border-slate-200 text-slate-700 hover:border-slate-300"
+                  ? "border-accent bg-accent-soft text-foreground shadow-[0_6px_16px_-10px_var(--accent)]"
+                  : "border-surface bg-surface-muted text-foreground hover-border-accent hover-text-accent"
               }`}
             >
               {tag}
@@ -81,31 +81,31 @@ export default function EndpointList({ endpoints, selectedId, onSelect }: Endpoi
         </div>
       </div>
 
-      <div className="mt-3 space-y-2 overflow-y-auto pr-1 max-h-[520px]">
+      <div className="mt-3 max-h-[520px] space-y-2 overflow-y-auto pr-1">
         {filtered.map((endpoint) => (
           <button
             type="button"
             key={endpoint.id}
             onClick={() => onSelect?.(endpoint.id)}
-            className={`w-full rounded-lg border px-3 py-2 text-left transition ${
+            className={`w-full rounded-xl border px-3 py-2 text-left transition ${
               endpoint.id === selectedId
-                ? "border-indigo-500 bg-indigo-50"
-                : "border-slate-200 bg-white hover:border-slate-300"
+                ? "border-accent bg-accent-soft shadow-[0_10px_26px_-18px_var(--accent)]"
+                : "border-surface bg-surface-muted hover-border-accent"
             }`}
           >
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center rounded-full bg-slate-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+              <span className="inline-flex items-center rounded-full border border-accent/50 bg-accent-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-foreground">
                 {endpoint.method}
               </span>
-              <span className="text-sm font-semibold text-slate-900">{endpoint.path}</span>
+              <span className="text-sm font-semibold text-foreground">{endpoint.path}</span>
             </div>
             {endpoint.summary ? (
-              <p className="mt-1 text-xs text-slate-600 line-clamp-2">{endpoint.summary}</p>
+              <p className="mt-1 line-clamp-2 text-xs muted">{endpoint.summary}</p>
             ) : null}
           </button>
         ))}
         {filtered.length === 0 ? (
-          <p className="text-sm text-slate-600">No endpoints match your filters.</p>
+          <p className="text-sm muted">No endpoints match your filters.</p>
         ) : null}
       </div>
     </div>

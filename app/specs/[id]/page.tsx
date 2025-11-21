@@ -50,7 +50,7 @@ export default async function SpecPage({ params }: SpecPageProps) {
         actions={
           <Link
             href="/"
-            className="rounded-full border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+            className="btn-ghost text-sm font-semibold hover-text-accent"
           >
             Upload another
           </Link>
@@ -59,9 +59,9 @@ export default async function SpecPage({ params }: SpecPageProps) {
 
       <div className="mt-6 space-y-4">
         {errorMessage ? (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-rose-800">
-            <p className="font-semibold">Unable to analyze this spec</p>
-            <p className="text-sm">{errorMessage}</p>
+          <div className="rounded-xl border border-rose-400/60 bg-[color-mix(in_srgb,#f43f5e_16%,transparent)] p-4 text-foreground shadow-lg">
+            <p className="font-semibold text-foreground">Unable to analyze this spec</p>
+            <p className="text-sm text-foreground">{errorMessage}</p>
           </div>
         ) : parsedModel && graph && metrics ? (
           <SpecAnalysisView model={parsedModel} graph={graph} metrics={metrics} />

@@ -1,0 +1,17 @@
+services:
+  app:
+    image: api-dependency-map
+    build:
+      context: .
+    working_dir: /app
+    environment:
+      DATABASE_URL: "file:./prisma/dev.db"
+      NEXT_TELEMETRY_DISABLED: "1"
+      NODE_ENV: "development"
+    ports:
+      - "${PORT:-3000}:3000"
+    # Run in dev mode so Next.js Dev Tools/customization UI are available
+    command: sh -c "npm install --include=dev && npx prisma generate && npx prisma db push && npm run dev"
+    volumes:
+      - .:/app
+      - /app/node_modules

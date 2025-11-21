@@ -1,0 +1,121 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "Todo Service", "version": "1.0.0" },
+  "paths": {
+    "/todos": {
+      "get": {
+        "summary": "List todos",
+        "tags": ["todos"],
+        "responses": {
+          "200": {
+            "description": "List of todos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Todo" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create todo",
+        "tags": ["todos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NewTodo" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Todo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todos/{id}": {
+      "get": {
+        "summary": "Get todo",
+        "tags": ["todos"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Todo", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Todo" } } } },
+          "404": { "description": "Not found" }
+        }
+      },
+      "patch": {
+        "summary": "Update todo",
+        "tags": ["todos"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateTodo" }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Updated", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Todo" } } } } }
+      }
+    },
+    "/users/{userId}/todos": {
+      "get": {
+        "summary": "List todos by user",
+        "tags": ["todos", "users"],
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Todos",
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Todo" } } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Todo": {
+        "type": "object",
+        "required": ["id", "title", "ownerId"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "done": { "type": "boolean" },
+          "ownerId": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "NewTodo": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "UpdateTodo": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "done": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

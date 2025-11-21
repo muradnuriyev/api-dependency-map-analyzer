@@ -15,10 +15,10 @@ export default async function Home() {
     <MainLayout>
       <PageHeader
         title="API Dependency Map Analyzer"
-        description="Parse OpenAPI specs, visualize endpoint ↔ schema relationships, and spot chokepoints before they haunt you in production."
+        description="Parse OpenAPI specs, visualize endpoint-to-schema relationships, and spot chokepoints before they haunt you in production."
       />
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.6fr,1fr]">
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1.55fr,1fr]">
         <UploadSpecForm />
         <SpecList specs={latestSpecs} />
       </div>

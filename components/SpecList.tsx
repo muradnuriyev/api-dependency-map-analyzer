@@ -7,15 +7,15 @@ interface SpecListProps {
 export default function SpecList({ specs }: SpecListProps) {
   // Lists a handful of recently saved specs with links.
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="card p-6 shadow-lg">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">Recent specs</h3>
-          <p className="text-sm text-slate-600">Latest uploads stored locally.</p>
+          <h3 className="text-lg font-semibold text-foreground">Recent specs</h3>
+          <p className="text-sm muted">Latest uploads stored locally.</p>
         </div>
         <Link
           href="/samples/petstore.json"
-          className="text-sm font-medium text-indigo-600 transition hover:text-indigo-800"
+          className="text-sm font-medium text-accent transition hover:opacity-80"
         >
           Download sample
         </Link>
@@ -23,24 +23,24 @@ export default function SpecList({ specs }: SpecListProps) {
 
       <div className="mt-4 space-y-3">
         {specs.length === 0 ? (
-          <p className="text-sm text-slate-600">No specs yet. Upload your first one!</p>
+          <p className="text-sm muted">No specs yet. Upload your first one!</p>
         ) : (
           specs.map((spec) => (
             <Link
               key={spec.id}
               href={`/specs/${spec.id}`}
-              className="flex items-center justify-between rounded-lg border border-transparent px-3 py-2 transition hover:border-indigo-100 hover:bg-indigo-50"
+              className="flex items-center justify-between rounded-xl border border-surface bg-surface-muted px-3 py-2 transition hover-border-accent hover-bg-accent-soft"
             >
               <div>
-                <p className="text-sm font-semibold text-slate-900">{spec.name}</p>
-                <p className="text-xs text-slate-600">
+                <p className="text-sm font-semibold text-foreground">{spec.name}</p>
+                <p className="text-xs muted">
                   {new Intl.DateTimeFormat("en", {
                     dateStyle: "medium",
                     timeStyle: "short",
                   }).format(spec.createdAt)}
                 </p>
               </div>
-              <span className="text-xs font-semibold text-indigo-600">View</span>
+              <span className="text-xs font-semibold text-accent">View</span>
             </Link>
           ))
         )}

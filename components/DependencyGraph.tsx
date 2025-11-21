@@ -39,17 +39,15 @@ export default function DependencyGraph({
   );
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="card p-4 shadow-lg">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-base font-semibold text-slate-900">Dependency graph</h3>
-          <p className="text-xs text-slate-600">
-            Endpoints, schemas, and tags are linked by usage patterns.
-          </p>
+          <h3 className="text-base font-semibold text-foreground">Dependency graph</h3>
+          <p className="text-xs muted">Endpoints, schemas, and tags are linked by usage patterns.</p>
         </div>
       </div>
 
-      <div className="mt-3 h-[420px] rounded-xl border border-slate-100 bg-slate-50">
+      <div className="mt-3 h-[420px] rounded-xl border border-surface bg-surface-muted transition">
         <ReactFlow
           nodes={decoratedNodes}
           edges={edges}
@@ -61,7 +59,7 @@ export default function DependencyGraph({
             }
           }}
         >
-          <Background gap={16} color="#e5e7eb" className="stroke-1" />
+          <Background gap={16} color="var(--border)" className="stroke-1" />
           <MiniMap />
           <Controls position="bottom-right" />
         </ReactFlow>

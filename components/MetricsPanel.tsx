@@ -7,8 +7,8 @@ interface MetricsPanelProps {
 export default function MetricsPanel({ metrics }: MetricsPanelProps) {
   // Key figures plus two lists: most used schemas and tag distribution.
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-      <h3 className="text-base font-semibold text-slate-900">API metrics</h3>
+    <div className="card p-4 shadow-lg">
+      <h3 className="text-base font-semibold text-foreground">API metrics</h3>
       <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <MetricTile label="Endpoints" value={metrics.endpointCount} />
         <MetricTile label="Schemas" value={metrics.schemaCount} />
@@ -25,20 +25,18 @@ export default function MetricsPanel({ metrics }: MetricsPanelProps) {
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Most used schemas
-          </h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide muted">Most used schemas</h4>
           <div className="mt-2 space-y-1">
             {metrics.mostUsedSchemas.length === 0 ? (
-              <p className="text-sm text-slate-600">No shared schemas yet.</p>
+              <p className="text-sm muted">No shared schemas yet.</p>
             ) : (
               metrics.mostUsedSchemas.map((item) => (
                 <div
                   key={item.schema}
-                  className="flex items-center justify-between rounded-lg bg-slate-50 px-2 py-1 text-sm text-slate-800"
+                  className="flex items-center justify-between rounded-lg border border-surface bg-surface-muted px-2 py-1 text-sm text-foreground"
                 >
                   <span>{item.schema}</span>
-                  <span className="text-xs text-slate-600">{item.usageCount} endpoints</span>
+                  <span className="text-xs muted">{item.usageCount} endpoints</span>
                 </div>
               ))
             )}
@@ -46,20 +44,18 @@ export default function MetricsPanel({ metrics }: MetricsPanelProps) {
         </div>
 
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Tag distribution
-          </h4>
+          <h4 className="text-xs font-semibold uppercase tracking-wide muted">Tag distribution</h4>
           <div className="mt-2 space-y-1">
             {metrics.tagDistribution.length === 0 ? (
-              <p className="text-sm text-slate-600">No tags provided.</p>
+              <p className="text-sm muted">No tags provided.</p>
             ) : (
               metrics.tagDistribution.map((item) => (
                 <div
                   key={item.tag}
-                  className="flex items-center justify-between rounded-lg bg-slate-50 px-2 py-1 text-sm text-slate-800"
+                  className="flex items-center justify-between rounded-lg border border-surface bg-surface-muted px-2 py-1 text-sm text-foreground"
                 >
                   <span>{item.tag}</span>
-                  <span className="text-xs text-slate-600">{item.count} endpoints</span>
+                  <span className="text-xs muted">{item.count} endpoints</span>
                 </div>
               ))
             )}
@@ -72,9 +68,9 @@ export default function MetricsPanel({ metrics }: MetricsPanelProps) {
 
 function MetricTile({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="text-lg font-semibold text-slate-900">{value}</p>
+    <div className="rounded-xl border border-surface bg-surface-muted px-3 py-2">
+      <p className="text-xs uppercase tracking-wide muted">{label}</p>
+      <p className="text-lg font-semibold text-foreground">{value}</p>
     </div>
   );
 }

@@ -75,63 +75,58 @@ export default function UploadSpecForm({ defaultContent = "" }: UploadSpecFormPr
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-    >
+    <form onSubmit={handleSubmit} className="card p-6 shadow-lg">
       <div className="flex items-center justify-between gap-2">
         <div>
-          <h3 className="text-lg font-semibold text-slate-900">Upload or paste spec</h3>
-          <p className="text-sm text-slate-600">
-            Supports OpenAPI/Swagger v3 JSON or YAML.
-          </p>
+          <h3 className="text-lg font-semibold text-foreground">Upload or paste spec</h3>
+          <p className="text-sm muted">Supports OpenAPI/Swagger v3 JSON or YAML.</p>
         </div>
         <button
           type="button"
           onClick={handleLoadSample}
-          className="rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+          className="btn-ghost text-sm font-medium hover-text-accent"
         >
           Use sample
         </button>
       </div>
 
-      <div className="mt-4 space-y-3">
+      <div className="mt-5 space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-800">Name</label>
+          <label className="text-sm font-medium text-foreground">Name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="My API"
-            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-0 transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+            className="w-full rounded-xl border border-surface bg-surface-muted px-3 py-2 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/60"
           />
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-800">Specification</label>
+          <label className="text-sm font-medium text-foreground">Specification</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Paste your OpenAPI JSON or YAML here..."
             rows={12}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm outline-none ring-0 transition focus:border-indigo-500 focus:bg-white focus:ring-1 focus:ring-indigo-200"
+            className="w-full rounded-xl border border-surface bg-surface-muted px-3 py-2 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/60"
           />
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700">
+          <label className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground">
             <input type="file" accept=".json,.yaml,.yml" onChange={handleFileChange} />
             Upload JSON/YAML
           </label>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            className="btn-accent disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isSubmitting ? "Analyzing..." : "Analyze API"}
           </button>
         </div>
 
-        {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+        {error ? <p className="text-sm text-rose-500">{error}</p> : null}
       </div>
     </form>
   );
